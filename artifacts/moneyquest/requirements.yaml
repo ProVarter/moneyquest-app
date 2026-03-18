@@ -1,0 +1,27 @@
+packages:
+  "framer-motion": "For page transitions and interactive gamified animations"
+  "recharts": "For financial charts (monthly trends, category breakdowns, compound interest)"
+  "canvas-confetti": "For celebration effects when completing goals and challenges"
+  "@types/canvas-confetti": "Types for canvas-confetti"
+  "zustand": "For lightweight UI state management (theme, language, global modals)"
+  "i18next": "Core internationalization library"
+  "react-i18next": "React bindings for i18next"
+  "date-fns": "For formatting dates nicely in the UI"
+  "zod": "For form validation schemas"
+  "@hookform/resolvers": "To integrate Zod with react-hook-form"
+  "react-hook-form": "For robust form handling"
+
+images:
+  - path: "artifacts/moneyquest/public/images/empty-state.png"
+    description: "A cute, friendly 3D illustration of an empty piggy bank or a sad wallet looking for coins, vibrant colors, clean background"
+    aspect_ratio: "1:1"
+  - path: "artifacts/moneyquest/public/images/hero-bg.png"
+    description: "Abstract premium gamified background with smooth gradients of deep indigo, emerald green, and gold, subtle floating coins or stars in the background"
+    aspect_ratio: "16:9"
+  - path: "artifacts/moneyquest/public/images/premium-badge.png"
+    description: "A highly polished, shiny 3D gold medal or crown with sparkles, representing a premium subscription"
+    aspect_ratio: "1:1"
+
+notes:
+  - "The app uses JWT authentication via localStorage ('mq_token'). We patch window.fetch to automatically attach the Authorization: Bearer <token> header to all /api/ requests."
+  - "The API is hosted at /api as per the OpenAPI spec."

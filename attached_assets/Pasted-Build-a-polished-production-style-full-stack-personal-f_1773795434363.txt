@@ -1,0 +1,360 @@
+Build a polished, production-style full-stack personal finance web app called “MoneyQuest” using Replit.
+
+GENERAL PRODUCT VISION:
+The app should help users track personal finances in a very simple, friendly, intuitive, and motivating way. It must combine finance tracking with goal-setting, mini-game challenges, savings motivation, and clear visual progress. The product should feel modern, interactive, and accessible for users of all ages, including non-technical and older users.
+
+CORE DIFFERENTIATION:
+This is not just a budgeting app. It is a gamified personal finance coach. The app should make saving money and controlling expenses feel rewarding, clear, and engaging.
+
+LANGUAGES:
+The app must support full internationalization from the start. All UI text must be translatable and must not be hardcoded.
+Supported languages:
+- English
+- Spanish
+- German
+- Portuguese
+- French
+- Russian
+
+Use a clean i18n structure with translation files:
+- en.json
+- es.json
+- de.json
+- pt.json
+- fr.json
+- ru.json
+
+TECH STACK:
+- Frontend: React + TypeScript
+- Styling: Tailwind CSS + shadcn/ui
+- Animations: Framer Motion
+- Charts: Recharts
+- Backend: Node.js + Express + TypeScript
+- Database: PostgreSQL
+- ORM: Prisma
+- Authentication: email/password auth with secure hashing and sessions or JWT
+- Payments: Stripe subscription integration
+- State management: lightweight, clean React hooks or Zustand
+- Architecture should be clean, modular, and scalable
+
+DESIGN SYSTEM:
+Design a modern, elegant, approachable UI.
+Requirements:
+- extremely intuitive
+- minimal clutter
+- large tap targets
+- friendly cards
+- clear typography
+- soft but premium visual style
+- light mode and dark mode
+- accessible color contrast
+- responsive for mobile, tablet, and desktop
+- suitable for users of any age
+
+BOTTOM NAVIGATION:
+Create 5 main navigation sections:
+1. Home
+2. Transactions
+3. Goals
+4. Insights
+5. Profile
+
+AUTHENTICATION FLOW:
+- Sign up
+- Log in
+- Log out
+- Forgot password UI placeholder
+- onboarding after first signup
+
+ONBOARDING FLOW:
+Create a polished onboarding flow:
+1. Welcome screen
+2. Language selection
+3. Currency selection
+4. Ask user’s priority:
+   - Save money
+   - Control spending
+   - Build emergency fund
+   - Pay off debt
+   - Reach a big financial goal
+5. Create first savings goal
+6. Add first income or expense
+7. Land on dashboard with useful starter insights
+
+HOME DASHBOARD:
+Build a beautiful dashboard showing:
+- total balance overview
+- income this month
+- expenses this month
+- savings this month
+- budget health
+- goal progress cards
+- current streak
+- challenge of the day
+- upcoming subscriptions/bills
+- quick add transaction button
+- recent transactions
+- personalized smart insights
+
+TRANSACTIONS MODULE:
+Users must be able to:
+- add income
+- add expense
+- edit transaction
+- delete transaction
+- assign category
+- assign subcategory
+- add tags
+- add notes
+- select date
+- upload receipt image placeholder
+- create recurring transactions
+- filter and search transactions
+- split transaction across categories
+
+Use clear categories like:
+- Housing
+- Food
+- Transport
+- Shopping
+- Entertainment
+- Health
+- Education
+- Bills
+- Subscriptions
+- Savings
+- Other
+
+BUDGETING MODULE:
+Implement category budgets:
+- monthly budget per category
+- current spent amount
+- remaining amount
+- warning state when near limit
+- exceeded budget state
+- optional rollover mode placeholder
+- “safe to spend” card
+
+GOALS MODULE:
+Users must be able to create, edit, archive, and track savings goals.
+Goal properties:
+- title
+- icon
+- target amount
+- current amount
+- monthly contribution
+- deadline
+- status
+- progress percentage
+- projected completion date
+
+Create rich goal cards with:
+- progress bar
+- milestone markers
+- encouraging messages
+- contribution history
+- CTA to add money to goal
+
+Include default goal templates:
+- Emergency Fund
+- Vacation
+- New Car
+- Home Down Payment
+- Wedding
+- Debt Payoff
+- New Laptop
+- Investment Goal
+
+SAVINGS CALCULATOR:
+Build a dedicated calculator page.
+Inputs:
+- initial amount
+- monthly contribution
+- annual interest rate
+- number of years
+- inflation rate toggle
+- yearly contribution increase optional
+Outputs:
+- future value
+- total contributed
+- interest earned
+- inflation-adjusted value
+- chart over time
+- multiple scenario comparison cards
+
+Example use case:
+“If I save $100 every month for 5 years, how much will I have?”
+
+SUBSCRIPTIONS MODULE:
+Add a recurring expenses / subscriptions section:
+- name
+- amount
+- next charge date
+- billing cycle
+- annual cost projection
+- reminder before charge
+- identify expensive subscriptions
+- mark as essential / non-essential
+
+GAMIFICATION SYSTEM:
+This is a core feature.
+Implement:
+- XP points
+- levels
+- streaks
+- badges
+- daily and weekly challenges
+- completion celebration animations
+- mission center UI
+
+Example challenges:
+- No Spend Day
+- Save $10 Today
+- Skip One Unnecessary Purchase
+- Stay Within Food Budget for 3 Days
+- Review All Subscriptions
+- Add Money to a Goal
+- Track Expenses 7 Days in a Row
+
+Create a reward system:
+- XP for actions
+- badge unlocks
+- streak counter
+- motivational feedback
+
+INSIGHTS MODULE:
+Build analytics and reporting screens with charts:
+- monthly expenses trend
+- income vs expenses
+- savings rate
+- category breakdown pie chart
+- budget vs actual
+- goal progress over time
+- recurring payments summary
+- financial health score
+
+SMART INSIGHTS:
+Generate simple rule-based insights such as:
+- “You spent 18% more on food this week than last week.”
+- “You are 72% of the way to your vacation goal.”
+- “Canceling this subscription could save you $120 per year.”
+- “At your current pace, you will reach your emergency fund in 8 months.”
+- “Your savings rate improved this month.”
+
+PROFILE / SETTINGS:
+Include:
+- user profile
+- language switcher
+- currency switcher
+- theme toggle
+- notification preferences
+- export data placeholder
+- manage subscription
+- privacy settings placeholder
+- delete account placeholder
+
+PRICING / SUBSCRIPTION MODEL:
+Implement 2 plans:
+1. Free
+2. Premium Monthly
+
+FREE PLAN:
+- manual transaction tracking
+- basic categories
+- up to 3 goals
+- basic savings calculator
+- basic reports
+- limited challenges
+
+PREMIUM PLAN:
+- unlimited goals
+- advanced analytics
+- advanced scenario planner
+- premium challenges
+- financial health score
+- recurring payments intelligence
+- exports
+- family mode placeholder
+- enhanced insights
+- advanced forecast tools
+
+Integrate Stripe for monthly premium subscription.
+Use a clean paywall screen that explains value clearly.
+
+DATABASE MODELS:
+Create proper Prisma models for:
+- User
+- Account
+- Transaction
+- Budget
+- Goal
+- Subscription
+- Challenge
+- UserChallenge
+- SavingsScenario
+- Achievement
+- UserSettings
+
+SEED DATA:
+Seed demo data so the app looks alive immediately in development:
+- demo user
+- sample transactions
+- sample budgets
+- sample goals
+- sample subscriptions
+- sample completed challenges
+- charts populated with realistic demo values
+
+UX DETAILS:
+- smooth loading states
+- empty states with friendly illustrations/placeholders
+- success toasts
+- validation errors
+- polished modals
+- skeleton loading
+- mobile-first design
+- delightful microinteractions
+- confetti or celebration when a goal milestone is reached
+
+CODE QUALITY:
+- use TypeScript types everywhere
+- organize code into reusable components
+- create clean folder structure
+- keep components modular
+- write maintainable code
+- no messy duplication
+- environment variables for secrets
+- secure auth handling
+- basic API validation
+- clear README with setup instructions
+
+DELIVERABLES:
+1. Fully working app structure
+2. Frontend + backend integrated
+3. PostgreSQL + Prisma setup
+4. Seed script
+5. Stripe subscription flow
+6. i18n setup for all 6 languages
+7. Responsive UI
+8. Demo-ready polished MVP
+
+IMPORTANT PRODUCT PRIORITIES:
+1. simplicity
+2. intuitiveness
+3. gamification
+4. clear goal tracking
+5. beautiful UX
+6. multilingual support
+7. premium-ready monetization
+
+Please generate:
+- project structure
+- database schema
+- backend routes
+- frontend pages
+- reusable components
+- seed data
+- translation file examples
+- working starter implementation for all critical flows
+
+Do not create a generic template. Create a polished, convincing finance product that feels premium and memorable.

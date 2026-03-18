@@ -1,22 +1,41 @@
 openapi: 3.1.0
 info:
-  # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: MoneyQuest Personal Finance API
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
     description: Health operations
+  - name: auth
+    description: Authentication
+  - name: users
+    description: User management
+  - name: transactions
+    description: Transaction management
+  - name: goals
+    description: Savings goals
+  - name: budgets
+    description: Budget management
+  - name: subscriptions
+    description: Recurring subscriptions
+  - name: challenges
+    description: Gamification challenges
+  - name: achievements
+    description: Achievements and badges
+  - name: insights
+    description: Financial insights
+  - name: savings
+    description: Savings calculator
+
 paths:
   /healthz:
     get:
       operationId: healthCheck
       tags: [health]
       summary: Health check
-      description: Returns server health status
       responses:
         "200":
           description: Healthy
@@ -24,6 +43,624 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  /auth/register:
+    post:
+      operationId: register
+      tags: [auth]
+      summary: Register a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterInput"
+      responses:
+        "201":
+          description: User registered
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+        "400":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /auth/login:
+    post:
+      operationId: login
+      tags: [auth]
+      summary: Login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginInput"
+      responses:
+        "200":
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+        "401":
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /auth/logout:
+    post:
+      operationId: logout
+      tags: [auth]
+      summary: Logout
+      responses:
+        "200":
+          description: Logged out
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+
+  /auth/me:
+    get:
+      operationId: getMe
+      tags: [auth]
+      summary: Get current user
+      responses:
+        "200":
+          description: Current user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /users/settings:
+    get:
+      operationId: getUserSettings
+      tags: [users]
+      summary: Get user settings
+      responses:
+        "200":
+          description: User settings
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserSettings"
+    patch:
+      operationId: updateUserSettings
+      tags: [users]
+      summary: Update user settings
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateUserSettingsInput"
+      responses:
+        "200":
+          description: Settings updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserSettings"
+
+  /users/stats:
+    get:
+      operationId: getUserStats
+      tags: [users]
+      summary: Get user gamification stats
+      responses:
+        "200":
+          description: User stats
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserStats"
+
+  /transactions:
+    get:
+      operationId: getTransactions
+      tags: [transactions]
+      summary: Get all transactions
+      parameters:
+        - name: type
+          in: query
+          schema:
+            type: ["string", "null"]
+        - name: category
+          in: query
+          schema:
+            type: ["string", "null"]
+        - name: startDate
+          in: query
+          schema:
+            type: ["string", "null"]
+        - name: endDate
+          in: query
+          schema:
+            type: ["string", "null"]
+        - name: search
+          in: query
+          schema:
+            type: ["string", "null"]
+        - name: limit
+          in: query
+          schema:
+            type: ["integer", "null"]
+        - name: offset
+          in: query
+          schema:
+            type: ["integer", "null"]
+      responses:
+        "200":
+          description: List of transactions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Transaction"
+    post:
+      operationId: createTransaction
+      tags: [transactions]
+      summary: Create a transaction
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateTransactionInput"
+      responses:
+        "201":
+          description: Transaction created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Transaction"
+
+  /transactions/{id}:
+    get:
+      operationId: getTransaction
+      tags: [transactions]
+      summary: Get a transaction
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Transaction
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Transaction"
+    patch:
+      operationId: updateTransaction
+      tags: [transactions]
+      summary: Update a transaction
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateTransactionInput"
+      responses:
+        "200":
+          description: Transaction updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Transaction"
+    delete:
+      operationId: deleteTransaction
+      tags: [transactions]
+      summary: Delete a transaction
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+
+  /goals:
+    get:
+      operationId: getGoals
+      tags: [goals]
+      summary: Get all goals
+      responses:
+        "200":
+          description: List of goals
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Goal"
+    post:
+      operationId: createGoal
+      tags: [goals]
+      summary: Create a goal
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateGoalInput"
+      responses:
+        "201":
+          description: Goal created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Goal"
+
+  /goals/{id}:
+    patch:
+      operationId: updateGoal
+      tags: [goals]
+      summary: Update a goal
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateGoalInput"
+      responses:
+        "200":
+          description: Goal updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Goal"
+    delete:
+      operationId: deleteGoal
+      tags: [goals]
+      summary: Delete a goal
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+
+  /goals/{id}/contribute:
+    post:
+      operationId: contributeToGoal
+      tags: [goals]
+      summary: Add money to a goal
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ContributeGoalInput"
+      responses:
+        "200":
+          description: Contribution added
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Goal"
+
+  /budgets:
+    get:
+      operationId: getBudgets
+      tags: [budgets]
+      summary: Get all budgets
+      responses:
+        "200":
+          description: List of budgets
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Budget"
+    post:
+      operationId: createBudget
+      tags: [budgets]
+      summary: Create a budget
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateBudgetInput"
+      responses:
+        "201":
+          description: Budget created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Budget"
+
+  /budgets/{id}:
+    patch:
+      operationId: updateBudget
+      tags: [budgets]
+      summary: Update a budget
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateBudgetInput"
+      responses:
+        "200":
+          description: Budget updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Budget"
+    delete:
+      operationId: deleteBudget
+      tags: [budgets]
+      summary: Delete a budget
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+
+  /subscriptions:
+    get:
+      operationId: getSubscriptions
+      tags: [subscriptions]
+      summary: Get all subscriptions
+      responses:
+        "200":
+          description: List of subscriptions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Subscription"
+    post:
+      operationId: createSubscription
+      tags: [subscriptions]
+      summary: Create a subscription
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateSubscriptionInput"
+      responses:
+        "201":
+          description: Subscription created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Subscription"
+
+  /subscriptions/{id}:
+    patch:
+      operationId: updateSubscription
+      tags: [subscriptions]
+      summary: Update a subscription
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateSubscriptionInput"
+      responses:
+        "200":
+          description: Subscription updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Subscription"
+    delete:
+      operationId: deleteSubscription
+      tags: [subscriptions]
+      summary: Delete a subscription
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+
+  /challenges:
+    get:
+      operationId: getChallenges
+      tags: [challenges]
+      summary: Get all challenges
+      responses:
+        "200":
+          description: List of challenges
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Challenge"
+
+  /challenges/{id}/complete:
+    post:
+      operationId: completeChallenge
+      tags: [challenges]
+      summary: Mark a challenge as complete
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Challenge completed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ChallengeResult"
+
+  /achievements:
+    get:
+      operationId: getAchievements
+      tags: [achievements]
+      summary: Get all achievements
+      responses:
+        "200":
+          description: List of achievements
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Achievement"
+
+  /insights/dashboard:
+    get:
+      operationId: getDashboardInsights
+      tags: [insights]
+      summary: Get dashboard summary data
+      responses:
+        "200":
+          description: Dashboard data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DashboardInsights"
+
+  /insights/monthly:
+    get:
+      operationId: getMonthlyInsights
+      tags: [insights]
+      summary: Get monthly breakdown
+      parameters:
+        - name: months
+          in: query
+          schema:
+            type: ["integer", "null"]
+      responses:
+        "200":
+          description: Monthly data
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MonthlyData"
+
+  /insights/categories:
+    get:
+      operationId: getCategoryInsights
+      tags: [insights]
+      summary: Get spending by category
+      parameters:
+        - name: startDate
+          in: query
+          schema:
+            type: ["string", "null"]
+        - name: endDate
+          in: query
+          schema:
+            type: ["string", "null"]
+      responses:
+        "200":
+          description: Category breakdown
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CategoryData"
+
+  /savings/calculate:
+    post:
+      operationId: calculateSavings
+      tags: [savings]
+      summary: Calculate savings projection
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SavingsCalculatorInput"
+      responses:
+        "200":
+          description: Savings projection
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SavingsProjection"
+
 components:
   schemas:
     HealthStatus:
@@ -34,3 +671,697 @@ components:
       required:
         - status
 
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+      required:
+        - error
+
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        message:
+          type: ["string", "null"]
+      required:
+        - success
+
+    RegisterInput:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+        name:
+          type: string
+        language:
+          type: ["string", "null"]
+        currency:
+          type: ["string", "null"]
+      required:
+        - email
+        - password
+        - name
+
+    LoginInput:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+      required:
+        - email
+        - password
+
+    AuthResponse:
+      type: object
+      properties:
+        token:
+          type: string
+        user:
+          $ref: "#/components/schemas/User"
+      required:
+        - token
+        - user
+
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        email:
+          type: string
+        name:
+          type: string
+        avatar:
+          type: ["string", "null"]
+        xp:
+          type: integer
+        level:
+          type: integer
+        streak:
+          type: integer
+        isPremium:
+          type: boolean
+        createdAt:
+          type: string
+      required:
+        - id
+        - email
+        - name
+        - xp
+        - level
+        - streak
+        - isPremium
+        - createdAt
+
+    UserSettings:
+      type: object
+      properties:
+        id:
+          type: integer
+        userId:
+          type: integer
+        language:
+          type: string
+        currency:
+          type: string
+        theme:
+          type: string
+        financialGoal:
+          type: ["string", "null"]
+        notificationsEnabled:
+          type: boolean
+        weeklyReportEnabled:
+          type: boolean
+      required:
+        - id
+        - userId
+        - language
+        - currency
+        - theme
+        - notificationsEnabled
+        - weeklyReportEnabled
+
+    UpdateUserSettingsInput:
+      type: object
+      properties:
+        language:
+          type: ["string", "null"]
+        currency:
+          type: ["string", "null"]
+        theme:
+          type: ["string", "null"]
+        financialGoal:
+          type: ["string", "null"]
+        notificationsEnabled:
+          type: ["boolean", "null"]
+        weeklyReportEnabled:
+          type: ["boolean", "null"]
+
+    UserStats:
+      type: object
+      properties:
+        xp:
+          type: integer
+        level:
+          type: integer
+        streak:
+          type: integer
+        xpToNextLevel:
+          type: integer
+        totalChallengesCompleted:
+          type: integer
+        totalAchievements:
+          type: integer
+        financialHealthScore:
+          type: integer
+      required:
+        - xp
+        - level
+        - streak
+        - xpToNextLevel
+        - totalChallengesCompleted
+        - totalAchievements
+        - financialHealthScore
+
+    Transaction:
+      type: object
+      properties:
+        id:
+          type: integer
+        userId:
+          type: integer
+        type:
+          type: string
+        amount:
+          type: number
+        category:
+          type: string
+        subcategory:
+          type: ["string", "null"]
+        description:
+          type: string
+        notes:
+          type: ["string", "null"]
+        tags:
+          type: array
+          items:
+            type: string
+        date:
+          type: string
+        isRecurring:
+          type: boolean
+        recurringPeriod:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+      required:
+        - id
+        - userId
+        - type
+        - amount
+        - category
+        - description
+        - date
+        - isRecurring
+        - createdAt
+
+    CreateTransactionInput:
+      type: object
+      properties:
+        type:
+          type: string
+        amount:
+          type: number
+        category:
+          type: string
+        subcategory:
+          type: ["string", "null"]
+        description:
+          type: string
+        notes:
+          type: ["string", "null"]
+        tags:
+          type: array
+          items:
+            type: string
+        date:
+          type: string
+        isRecurring:
+          type: boolean
+        recurringPeriod:
+          type: ["string", "null"]
+      required:
+        - type
+        - amount
+        - category
+        - description
+        - date
+
+    UpdateTransactionInput:
+      type: object
+      properties:
+        type:
+          type: ["string", "null"]
+        amount:
+          type: ["number", "null"]
+        category:
+          type: ["string", "null"]
+        subcategory:
+          type: ["string", "null"]
+        description:
+          type: ["string", "null"]
+        notes:
+          type: ["string", "null"]
+        tags:
+          type: array
+          items:
+            type: string
+        date:
+          type: ["string", "null"]
+        isRecurring:
+          type: ["boolean", "null"]
+        recurringPeriod:
+          type: ["string", "null"]
+
+    Goal:
+      type: object
+      properties:
+        id:
+          type: integer
+        userId:
+          type: integer
+        title:
+          type: string
+        icon:
+          type: ["string", "null"]
+        targetAmount:
+          type: number
+        currentAmount:
+          type: number
+        monthlyContribution:
+          type: ["number", "null"]
+        deadline:
+          type: ["string", "null"]
+        status:
+          type: string
+        progressPercentage:
+          type: number
+        projectedCompletionDate:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+      required:
+        - id
+        - userId
+        - title
+        - targetAmount
+        - currentAmount
+        - status
+        - progressPercentage
+        - createdAt
+
+    CreateGoalInput:
+      type: object
+      properties:
+        title:
+          type: string
+        icon:
+          type: ["string", "null"]
+        targetAmount:
+          type: number
+        currentAmount:
+          type: number
+        monthlyContribution:
+          type: ["number", "null"]
+        deadline:
+          type: ["string", "null"]
+      required:
+        - title
+        - targetAmount
+
+    UpdateGoalInput:
+      type: object
+      properties:
+        title:
+          type: ["string", "null"]
+        icon:
+          type: ["string", "null"]
+        targetAmount:
+          type: ["number", "null"]
+        currentAmount:
+          type: ["number", "null"]
+        monthlyContribution:
+          type: ["number", "null"]
+        deadline:
+          type: ["string", "null"]
+        status:
+          type: ["string", "null"]
+
+    ContributeGoalInput:
+      type: object
+      properties:
+        amount:
+          type: number
+      required:
+        - amount
+
+    Budget:
+      type: object
+      properties:
+        id:
+          type: integer
+        userId:
+          type: integer
+        category:
+          type: string
+        monthlyLimit:
+          type: number
+        currentSpent:
+          type: number
+        remaining:
+          type: number
+        percentUsed:
+          type: number
+        status:
+          type: string
+        month:
+          type: integer
+        year:
+          type: integer
+        createdAt:
+          type: string
+      required:
+        - id
+        - userId
+        - category
+        - monthlyLimit
+        - currentSpent
+        - remaining
+        - percentUsed
+        - status
+        - month
+        - year
+        - createdAt
+
+    CreateBudgetInput:
+      type: object
+      properties:
+        category:
+          type: string
+        monthlyLimit:
+          type: number
+        month:
+          type: integer
+        year:
+          type: integer
+      required:
+        - category
+        - monthlyLimit
+
+    UpdateBudgetInput:
+      type: object
+      properties:
+        monthlyLimit:
+          type: ["number", "null"]
+
+    Subscription:
+      type: object
+      properties:
+        id:
+          type: integer
+        userId:
+          type: integer
+        name:
+          type: string
+        amount:
+          type: number
+        billingCycle:
+          type: string
+        nextChargeDate:
+          type: string
+        category:
+          type: string
+        isEssential:
+          type: boolean
+        annualCost:
+          type: number
+        createdAt:
+          type: string
+      required:
+        - id
+        - userId
+        - name
+        - amount
+        - billingCycle
+        - nextChargeDate
+        - category
+        - isEssential
+        - annualCost
+        - createdAt
+
+    CreateSubscriptionInput:
+      type: object
+      properties:
+        name:
+          type: string
+        amount:
+          type: number
+        billingCycle:
+          type: string
+        nextChargeDate:
+          type: string
+        category:
+          type: string
+        isEssential:
+          type: boolean
+      required:
+        - name
+        - amount
+        - billingCycle
+        - nextChargeDate
+        - category
+
+    UpdateSubscriptionInput:
+      type: object
+      properties:
+        name:
+          type: ["string", "null"]
+        amount:
+          type: ["number", "null"]
+        billingCycle:
+          type: ["string", "null"]
+        nextChargeDate:
+          type: ["string", "null"]
+        category:
+          type: ["string", "null"]
+        isEssential:
+          type: ["boolean", "null"]
+
+    Challenge:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        description:
+          type: string
+        xpReward:
+          type: integer
+        type:
+          type: string
+        difficulty:
+          type: string
+        isCompleted:
+          type: boolean
+        completedAt:
+          type: ["string", "null"]
+        expiresAt:
+          type: ["string", "null"]
+      required:
+        - id
+        - title
+        - description
+        - xpReward
+        - type
+        - difficulty
+        - isCompleted
+
+    ChallengeResult:
+      type: object
+      properties:
+        challenge:
+          $ref: "#/components/schemas/Challenge"
+        xpEarned:
+          type: integer
+        newLevel:
+          type: ["integer", "null"]
+        leveledUp:
+          type: boolean
+      required:
+        - challenge
+        - xpEarned
+        - leveledUp
+
+    Achievement:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        description:
+          type: string
+        icon:
+          type: string
+        xpReward:
+          type: integer
+        isUnlocked:
+          type: boolean
+        unlockedAt:
+          type: ["string", "null"]
+        category:
+          type: string
+      required:
+        - id
+        - title
+        - description
+        - icon
+        - xpReward
+        - isUnlocked
+        - category
+
+    DashboardInsights:
+      type: object
+      properties:
+        totalBalance:
+          type: number
+        incomeThisMonth:
+          type: number
+        expensesThisMonth:
+          type: number
+        savingsThisMonth:
+          type: number
+        savingsRate:
+          type: number
+        budgetHealthScore:
+          type: integer
+        recentTransactions:
+          type: array
+          items:
+            $ref: "#/components/schemas/Transaction"
+        goalProgress:
+          type: array
+          items:
+            $ref: "#/components/schemas/Goal"
+        upcomingSubscriptions:
+          type: array
+          items:
+            $ref: "#/components/schemas/Subscription"
+        smartInsights:
+          type: array
+          items:
+            type: string
+        streak:
+          type: integer
+        xp:
+          type: integer
+        level:
+          type: integer
+        dailyChallenge:
+          $ref: "#/components/schemas/Challenge"
+      required:
+        - totalBalance
+        - incomeThisMonth
+        - expensesThisMonth
+        - savingsThisMonth
+        - savingsRate
+        - budgetHealthScore
+        - recentTransactions
+        - goalProgress
+        - upcomingSubscriptions
+        - smartInsights
+        - streak
+        - xp
+        - level
+        - dailyChallenge
+
+    MonthlyData:
+      type: object
+      properties:
+        month:
+          type: string
+        income:
+          type: number
+        expenses:
+          type: number
+        savings:
+          type: number
+      required:
+        - month
+        - income
+        - expenses
+        - savings
+
+    CategoryData:
+      type: object
+      properties:
+        category:
+          type: string
+        amount:
+          type: number
+        percentage:
+          type: number
+        transactionCount:
+          type: integer
+      required:
+        - category
+        - amount
+        - percentage
+        - transactionCount
+
+    SavingsCalculatorInput:
+      type: object
+      properties:
+        initialAmount:
+          type: number
+        monthlyContribution:
+          type: number
+        annualRate:
+          type: number
+        years:
+          type: integer
+        inflationRate:
+          type: ["number", "null"]
+        yearlyIncrease:
+          type: ["number", "null"]
+      required:
+        - initialAmount
+        - monthlyContribution
+        - annualRate
+        - years
+
+    SavingsProjection:
+      type: object
+      properties:
+        futureValue:
+          type: number
+        totalContributed:
+          type: number
+        interestEarned:
+          type: number
+        inflationAdjustedValue:
+          type: ["number", "null"]
+        yearlyData:
+          type: array
+          items:
+            $ref: "#/components/schemas/YearlyProjection"
+      required:
+        - futureValue
+        - totalContributed
+        - interestEarned
+        - yearlyData
+
+    YearlyProjection:
+      type: object
+      properties:
+        year:
+          type: integer
+        balance:
+          type: number
+        contributed:
+          type: number
+        interest:
+          type: number
+      required:
+        - year
+        - balance
+        - contributed
+        - interest
