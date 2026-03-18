@@ -1,0 +1,129 @@
+You need to perform full troubleshooting on this app because it opens as a blank white screen in the browser, especially on mobile/Safari preview.
+
+The issue is NOT solved yet. Do not assume it is fixed. I need you to investigate the real root cause, fix it, and verify that the app renders correctly.
+
+TASK:
+Diagnose and fix the white blank screen problem completely.
+
+IMPORTANT WORKFLOW:
+1. First, inspect the app startup flow end-to-end.
+2. Find the exact root cause of the blank screen.
+3. Fix the issue in code.
+4. Verify the fix by checking that the app actually renders.
+5. Explain briefly what was broken and what you changed.
+
+DO NOT:
+- just guess
+- apply random superficial changes
+- claim success without verification
+- stop after one attempted fix
+
+YOU MUST SYSTEMATICALLY CHECK ALL OF THESE:
+
+A. RUNTIME / CONSOLE ERRORS
+- inspect browser console errors
+- inspect build output
+- inspect dev server logs
+- inspect network errors
+- check for JavaScript runtime crashes
+- check for React rendering errors
+- check for hydration issues
+- check for unhandled promise rejections
+
+B. ENTRY POINT / APP MOUNTING
+- verify the main entry file is correct
+- verify React is mounting into the correct DOM root
+- verify index.html contains the correct root element
+- verify the root element exists and has non-zero dimensions
+- verify App component is actually imported and rendered
+
+C. ROUTING ISSUES
+- check whether React Router or any router setup is breaking initial render
+- check for wrong route config
+- check for protected route redirect loops
+- check for 404 route issues
+- check for basename/path mismatch on Replit deployment
+- check whether the app fails only on deployed URL path
+
+D. CRASHING COMPONENTS
+- identify whether a component crashes on first render
+- temporarily isolate the app by rendering a minimal fallback component
+- then progressively restore sections until the breaking component is found
+- check dashboard, charts, i18n, auth provider, theme provider, query provider, and any custom hooks
+
+E. ASYNC DATA / API FAILURES
+- check whether initial page waits forever on API
+- check for broken fetch calls
+- check for invalid environment variables
+- check whether backend is failing and frontend never recovers
+- add safe fallbacks/loading/error boundaries where needed
+
+F. i18n / TRANSLATION FAILURES
+- check whether missing translation files or bad i18n initialization crashes app
+- verify default language loads successfully
+- verify language detection is not causing a runtime failure
+
+G. AUTH / SESSION FAILURES
+- check whether auth provider blocks render
+- check for infinite loading state in auth context
+- check for invalid local storage/session parsing
+- check redirect loops between login and app
+
+H. CHART / UI LIBRARY FAILURES
+- check whether Recharts, Framer Motion, or shadcn/ui components are crashing on mobile/Safari
+- check for window/document usage outside effects
+- check for SSR-incompatible code
+- check for ResizeObserver or layout issues breaking charts
+
+I. CSS / LAYOUT ISSUES
+- verify this is not just white text on white background
+- verify body, html, and root have proper height
+- check whether an overlay or absolute element covers the whole app
+- check whether CSS makes content invisible
+- check whether dark/light theme variables are broken
+
+J. MOBILE SAFARI / REPLIT DEPLOYMENT COMPATIBILITY
+- specifically test for Safari/mobile webview issues
+- check whether unsupported JS syntax or browser API is used
+- check deployment asset paths
+- check MIME/module loading issues
+- check if any script fails to load on deployed environment
+
+MANDATORY DEBUG STRATEGY:
+1. Start by replacing the current app render with a minimal visible test component:
+   - a simple page with colored background and text "App is rendering"
+2. If that renders, the mount/deployment is fine.
+3. Then restore providers one by one:
+   - theme provider
+   - i18n provider
+   - auth provider
+   - router
+   - dashboard/components
+4. Find the exact layer where rendering breaks.
+5. Fix that layer properly.
+
+REQUIRED CODE IMPROVEMENTS:
+- add a global React error boundary
+- add safe fallback UI for fatal frontend errors
+- add console logging around app bootstrap
+- make loading states explicit instead of returning null forever
+- ensure the app always renders some visible fallback even if data fails
+
+VERIFICATION REQUIREMENTS:
+After fixing, verify all of the following:
+- app loads without blank screen
+- initial route renders visible UI
+- no fatal console errors remain
+- mobile layout renders correctly
+- refresh on deployed URL still works
+- if API is unavailable, app still shows an error state instead of blank white screen
+
+OUTPUT FORMAT:
+At the end, give me:
+1. Root cause
+2. Files changed
+3. Exact fix applied
+4. What you tested
+5. Whether the app now renders successfully
+
+Be rigorous and act like a senior engineer debugging a production issue. Do not stop until the blank screen root cause is identified and fixed.
