@@ -11,30 +11,31 @@ import { useToast } from "@/hooks/use-toast";
 import confetti from "canvas-confetti";
 
 export default function Home() {
-  const { data, isLoading } = useGetDashboardInsights();
-  const queryClient = useQueryClient();
-  const { toast } = useToast();
-  
-  const completeMutation = useCompleteChallenge({
-    mutation: {
-      onSuccess: (res) => {
-        confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
-        toast({
-          title: "Challenge Completed! 🎉",
-          description: `You earned ${res.xpEarned} XP! ${res.leveledUp ? 'LEVEL UP!' : ''}`,
-        });
-        queryClient.invalidateQueries({ queryKey: getGetDashboardInsightsQueryKey() });
-      }
-    }
-  });
+const { data, isLoading, error } = useGetDashboardInsights();
 
-  if (isLoading || !data) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <Loader2 className="w-10 h-10 animate-spin text-primary" />
-      </div>
-    );
-  }
+if (isLoading) {
+  return (
+    <div style={{ padding: "24px", textAlign: "center" }}>
+      Loading dashboard...
+    </div>
+  );
+}
+
+if (error) {
+  return (
+    <div style={{ padding: "24px", textAlign: "center", color: "red" }}>
+      Dashboard request failed: {String((error as Error)?.message || error)}
+    </div>
+  );
+}
+
+if (!data) {
+  return (
+    <div style={{ padding: "24px", textAlign: "center" }}>
+      No dashboard data received.
+    </div>
+  );
+}
 
   return (
     <PageTransition className="pt-6 px-4">
