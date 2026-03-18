@@ -1,5 +1,8 @@
 import { Route, Switch } from "wouter";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import HomePage from "./pages/home";
+
+const queryClient = new QueryClient();
 
 function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -46,10 +49,12 @@ function NotFoundPage() {
 
 function App() {
   return (
-    <Switch>
-      <Route path="/" component={WrappedHome} />
-      <Route component={NotFoundPage} />
-    </Switch>
+    <QueryClientProvider client={queryClient}>
+      <Switch>
+        <Route path="/" component={WrappedHome} />
+        <Route component={NotFoundPage} />
+      </Switch>
+    </QueryClientProvider>
   );
 }
 
