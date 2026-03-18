@@ -1,4 +1,5 @@
 import { Route, Switch } from "wouter";
+import HomePage from "./pages/home";
 
 function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -27,15 +28,10 @@ function Layout({ children }: { children: React.ReactNode }) {
   );
 }
 
-function HomePage() {
+function WrappedHome() {
   return (
     <Layout>
-      <h1 style={{ fontSize: "32px", fontWeight: 700, marginBottom: "12px" }}>
-        Layout works ✅
-      </h1>
-      <p style={{ fontSize: "18px" }}>
-        Routing + layout are working.
-      </p>
+      <HomePage />
     </Layout>
   );
 }
@@ -43,7 +39,7 @@ function HomePage() {
 function NotFoundPage() {
   return (
     <Layout>
-      <h1 style={{ fontSize: "28px", fontWeight: 700 }}>404</h1>
+      <h1>404</h1>
     </Layout>
   );
 }
@@ -51,7 +47,7 @@ function NotFoundPage() {
 function App() {
   return (
     <Switch>
-      <Route path="/" component={HomePage} />
+      <Route path="/" component={WrappedHome} />
       <Route component={NotFoundPage} />
     </Switch>
   );
